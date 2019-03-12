@@ -12,12 +12,12 @@ final class Base32Tests: XCTestCase {
 		let output = "84"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -28,12 +28,12 @@ final class Base32Tests: XCTestCase {
 		let output = "8510"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -44,12 +44,12 @@ final class Base32Tests: XCTestCase {
 		let output = "85146"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -60,12 +60,12 @@ final class Base32Tests: XCTestCase {
 		let output = "85146H0"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -76,12 +76,12 @@ final class Base32Tests: XCTestCase {
 		let output = "85146H25"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -92,12 +92,12 @@ final class Base32Tests: XCTestCase {
 		let output = "91JPRV3F41BPYWKCCG"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -108,12 +108,12 @@ final class Base32Tests: XCTestCase {
 		let output = "AXQQEB10D5T20WK5C5P6RY90EXQQ4TVK44"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -124,12 +124,12 @@ final class Base32Tests: XCTestCase {
 		let output = "DHQQESBJCDGQ6S90AN850HAJ8D0N6H9064S36D1N6RVJ08A04CJ2AQH658"
 		
 		var encoder = Base32Encoder()
-		encoder.encodePartial(input.utf8)
+		encoder.encode(input.utf8)
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -140,7 +140,7 @@ final class Base32Tests: XCTestCase {
 		let output = "dhqQesbjcdgq6s9Oan850haj8d0n6h9o64s36d1n6rvj08a04cj2aqh658"
 		
 		var decoder = Base32Decoder()
-		decoder.decodePartial(output)
+		decoder.decode(output)
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -156,7 +156,7 @@ final class Base32Tests: XCTestCase {
 		let output = "DHQQESBJCDGQ6S90AN850HAJ8D0N6H9064S36D1N6RVJ08A04CJ2AQH658"
 		
 		var encoder = Base32Encoder()
-		input.forEach { encoder.encodePartial($0.utf8) }
+		input.forEach { encoder.encode($0.utf8) }
 		let encoded = encoder.finalize()
 		XCTAssertEqual(encoded, output)
 	}
@@ -171,7 +171,7 @@ final class Base32Tests: XCTestCase {
 		let output = "DHQQESBJCDGQ6S90AN850HAJ8D0N6H9064S36D1N6RVJ08A04CJ2AQH658"
 		
 		var encoder = Base32Encoder()
-		let partials = input.flatMap { encoder.encode($0.utf8) } + encoder.finalize()
+		let partials = input.flatMap { encoder.encodePartial($0.utf8) } + encoder.finalize()
 		let encoded = partials.reduce(into: "") { $0.append($1) }
 		XCTAssertEqual(encoded, output)
 	}
@@ -190,7 +190,7 @@ final class Base32Tests: XCTestCase {
 		]
 		
 		var decoder = Base32Decoder()
-		output.forEach { decoder.decodePartial($0) }
+		output.forEach { decoder.decode($0) }
 		let decoded = decoder.finalize()
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
@@ -210,7 +210,7 @@ final class Base32Tests: XCTestCase {
 		]
 		
 		var decoder = Base32Decoder()
-		let partials = output.flatMap { decoder.decode($0) } + decoder.finalize()
+		let partials = output.flatMap { decoder.decodePartial($0) } + decoder.finalize()
 		let decoded = partials
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)

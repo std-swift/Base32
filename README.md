@@ -26,7 +26,7 @@ import Base32
 ```Swift
 dependencies: [
 	.package(url: "https://github.com/std-swift/Base32.git",
-	         from: "1.0.0")
+	         from: "2.0.0")
 ],
 targets: [
 	.target(
@@ -39,25 +39,12 @@ targets: [
 
 ## Using
 
+- `Base32Decoder: StreamDecoder` with `Character` input elements and `[UInt8]` output
+- `Base32Encoder: StreamEncoder` with `UInt8` input elements and `String` output
+
 ### `Base32`
 
 ```Swift
-Base32.decode(_ data: String) -> [UInt8]
-Base32.encode(_ data: Sequence) -> String
-```
-
-### `Base32Decoder`
-
-```Swift
-mutating func decodePartial(_ data: String)
-mutating func decode(_ data: String) -> [UInt8]
-mutating func finalize() -> [UInt8]
-```
-
-### `Base32Encoder`
-
-```Swift
-mutating func encodePartial<T: Sequence>(_ data: T) where T.Element == UInt8
-mutating func encode<T: Sequence>(_ data: T) -> String where T.Element == UInt8
-mutating func finalize() -> String
+Base32.decode(_ data: Sequence) -> Base32Decoder.Decoded
+Base32.encode(_ data: Sequence) -> Base32Encoder.Encoded
 ```

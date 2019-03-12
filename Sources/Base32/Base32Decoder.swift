@@ -5,8 +5,11 @@
 
 import Encoding
 
-// A queue decoder. Data is stored in input and output queues.
-public struct Base32Decoder {
+public struct Base32Decoder: StreamDecoder {
+	public typealias Element = Character
+	public typealias Partial = [UInt8]
+	public typealias Decoded = [UInt8]
+	
 	private static let EndingCount = [0, 0, 1, 0, 2, 3, 0, 4]
 	private static let DecodeLookup: [Character : UInt8] = [
 		"0": 0, "O": 0, "o": 0,
@@ -50,7 +53,7 @@ public struct Base32Decoder {
 	
 	/// Add `data` to the decoding queue and decode as much as possible to the
 	/// output queue
-	public mutating func decodePartial(_ data: String) {
+	public mutating func decode<T: Sequence>(_ data: T) where T.Element == Element {
 		self.inputQueue.append(contentsOf: data
 			.compactMap { Base32Decoder.DecodeLookup[$0] })
 		self.decodeStep(final: false)
@@ -58,7 +61,7 @@ public struct Base32Decoder {
 	
 	/// Add `data` to the decoding queue and return everything that can be
 	/// decoded
-	public mutating func decode(_ data: String) -> [UInt8] {
+	public mutating func decodePartial<T: Sequence>(_ data: T) -> Partial where T.Element == Element {
 		self.inputQueue.append(contentsOf: data
 			.compactMap { Base32Decoder.DecodeLookup[$0] })
 		self.decodeStep(final: false)
@@ -67,7 +70,7 @@ public struct Base32Decoder {
 	}
 	
 	/// Stop buffering input data and encode the remaining buffer
-	public mutating func finalize() -> [UInt8] {
+	public mutating func finalize() -> Decoded {
 		self.decodeStep(final: true)
 		defer { self.outputQueue.removeAll(keepingCapacity: true) }
 		return self.outputQueue

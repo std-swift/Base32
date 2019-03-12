@@ -15,7 +15,7 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/std-swift/Encoding.git",
-		         from: "1.0.0")
+		         from: "1.1.0"),
 	],
 	targets: [
 		.target(
