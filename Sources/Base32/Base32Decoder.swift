@@ -69,7 +69,7 @@ public struct Base32Decoder: StreamDecoder {
 		return self.outputQueue
 	}
 	
-	/// Stop buffering input data and encode the remaining buffer
+	/// Stop buffering input data and decode the remaining buffer
 	public mutating func finalize() -> Decoded {
 		self.decodeStep(final: true)
 		defer { self.outputQueue.removeAll(keepingCapacity: true) }
