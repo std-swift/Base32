@@ -1,6 +1,6 @@
 # Base32
 
-[![](https://img.shields.io/badge/Swift-5.0-orange.svg)][1]
+[![](https://img.shields.io/badge/Swift-5.1--5.3-orange.svg)][1]
 [![](https://img.shields.io/badge/os-macOS%20|%20Linux-lightgray.svg)][1]
 [![](https://travis-ci.com/std-swift/Base32.svg?branch=master)][2]
 [![](https://codecov.io/gh/std-swift/Base32/branch/master/graph/badge.svg)][3]
@@ -19,32 +19,20 @@
 
 ## Importing
 
+Add the following line to the dependencies in your `Package.swift` file:
+
+```Swift
+.package(url: "https://github.com/std-swift/Base32.git", from: "3.0.0")
+```
+
+Add `Base32` as a dependency for your target:
+
+```swift
+.product(name: "Base32", package: "Base32"),
+```
+
+and finally,
+
 ```Swift
 import Base32
-```
-
-```Swift
-dependencies: [
-	.package(url: "https://github.com/std-swift/Base32.git",
-	         from: "2.0.0")
-],
-targets: [
-	.target(
-		name: "",
-		dependencies: [
-			"Base32"
-		]),
-]
-```
-
-## Using
-
-- `Base32Decoder: StreamDecoder` with `Character` input elements and `[UInt8]` output
-- `Base32Encoder: StreamEncoder` with `UInt8` input elements and `String` output
-
-### `Base32`
-
-```Swift
-Base32.decode(_ data: Sequence) -> Base32Decoder.Decoded
-Base32.encode(_ data: Sequence) -> Base32Encoder.Encoded
 ```

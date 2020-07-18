@@ -10,7 +10,7 @@ public struct Base32Encoder: StreamEncoder {
 	public typealias Partial = String
 	public typealias Encoded = String
 	
-	private static let EncodeLookup = Array("0123456789ABCDEFGHJKMNPQRSTVWXYZ")
+	private static let EncodeLookup = ContiguousArray("0123456789ABCDEFGHJKMNPQRSTVWXYZ")
 	
 	private var inputQueue = [UInt8]()
 	private var outputQueue = String()
@@ -37,18 +37,21 @@ public struct Base32Encoder: StreamEncoder {
 	
 	private mutating func encodeStep(final: Bool) {
 		let remaining = self.inputQueue.count % 5
-		let encoded = self.inputQueue
-			.dropLast(remaining)
-			.asBigEndian(resultBits: 5)
-			.map { Base32Encoder.EncodeLookup[$0] }
-		self.outputQueue.append(contentsOf: encoded)
-		
-		if final {
-			let encoded = self.inputQueue
-				.suffix(remaining)
+		Base32Encoder.EncodeLookup.withUnsafeBufferPointer { buffer in
+			let bitConverted = self.inputQueue
+				.dropLast(remaining)
 				.asBigEndian(resultBits: 5)
-				.map { Base32Encoder.EncodeLookup[$0] }
-			self.outputQueue.append(contentsOf: encoded)
+				.map { buffer[$0] }
+			self.outputQueue.append(contentsOf: bitConverted)
+		}
+		if final {
+			Base32Encoder.EncodeLookup.withUnsafeBufferPointer { buffer in
+				let encoded = self.inputQueue
+					.suffix(remaining)
+					.asBigEndian(resultBits: 5)
+					.map { buffer[$0] }
+				self.outputQueue.append(contentsOf: encoded)
+			}
 			self.inputQueue.removeAll(keepingCapacity: true)
 		} else {
 			self.inputQueue = self.inputQueue.suffix(remaining)

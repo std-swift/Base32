@@ -10,7 +10,7 @@ public struct Base32Decoder: StreamDecoder {
 	public typealias Partial = [UInt8]
 	public typealias Decoded = [UInt8]
 	
-	private static let EndingCount = [0, 0, 1, 0, 2, 3, 0, 4]
+	private static let EndingCount: ContiguousArray = [0, 0, 1, 0, 2, 3, 0, 4]
 	private static let DecodeLookup: [Character : UInt8] = [
 		"0": 0, "O": 0, "o": 0,
 		"1": 1, "I": 1, "L": 1, "l": 1,
@@ -84,11 +84,13 @@ public struct Base32Decoder: StreamDecoder {
 		self.outputQueue.append(contentsOf: decoded)
 		
 		if final {
-			let decoded: ArraySlice<UInt8> = self.inputQueue
-				.suffix(remaining)
-				.asBigEndian(sourceBits: 5)
-				.prefix(Base32Decoder.EndingCount[remaining])
-			self.outputQueue.append(contentsOf: decoded)
+			Base32Decoder.EndingCount.withUnsafeBufferPointer { buffer in
+				let decoded: ArraySlice<UInt8> = self.inputQueue
+					.suffix(remaining)
+					.asBigEndian(sourceBits: 5)
+					.prefix(buffer[remaining])
+				self.outputQueue.append(contentsOf: decoded)
+			}
 			self.inputQueue.removeAll(keepingCapacity: true)
 		} else {
 			self.inputQueue = self.inputQueue.suffix(remaining)

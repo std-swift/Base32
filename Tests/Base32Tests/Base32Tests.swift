@@ -215,4 +215,50 @@ final class Base32Tests: XCTestCase {
 			.map { Character(UnicodeScalar($0)) }
 		XCTAssertEqual(String(decoded), input)
 	}
+	
+	func testEncodingPerformance_Single() {
+		let string = [String](repeating: "lowercase UPPERCASE 1234567 !@#$%^&*", count: 10_000)
+			.flatMap { $0 }
+		let input = String(string).utf8
+		
+		var encoder = Base32Encoder()
+		measure {
+			encoder.encode(input)
+		}
+	}
+	
+	func testEncodingPerformance_Multiple() {
+		let strings = [String](repeating: "lowercase UPPERCASE 1234567 !@#$%^&*", count: 10_000)
+		let inputs = strings.map { $0.utf8 }
+		
+		var encoder = Base32Encoder()
+		measure {
+			for input in inputs {
+				encoder.encode(input)
+			}
+		}
+	}
+	
+	func testDecodingPerformance_Single() {
+		let string = [String](repeating: "lowercase UPPERCASE 1234567 !@#$%^&*", count: 10_000)
+			.flatMap { $0 }
+		let input = Base32.encode(String(string).utf8)
+		
+		var decoder = Base32Decoder()
+		measure {
+			decoder.decode(input)
+		}
+	}
+	
+	func testDecodingPerformance_Multiple() {
+		let strings = [String](repeating: "lowercase UPPERCASE 1234567 !@#$%^&*", count: 10_000)
+		let inputs = strings.map { Base32.encode($0.utf8) }
+		
+		var decoder = Base32Decoder()
+		measure {
+			for input in inputs {
+				decoder.decode(input)
+			}
+		}
+	}
 }

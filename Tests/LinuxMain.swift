@@ -1,8 +1,11 @@
-import XCTest
+//
+//  LinuxMain.swift
+//  Encoding
+//
 
-import Base32Tests
+#if os(Linux)
+import SwiftGlibc.C.stdlib
+#endif
 
-var tests = [XCTestCaseEntry]()
-tests += Base32Tests.__allTests()
-
-XCTMain(tests)
+print("Run the tests with `swift test --enable-test-discovery`.")
+exit(1)

@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.1
 //
 //  Package.swift
 //  Base32
@@ -15,12 +15,14 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/std-swift/Encoding.git",
-		         from: "1.1.0"),
+		         from: "2.0.0"),
 	],
 	targets: [
 		.target(
 			name: "Base32",
-			dependencies: ["Encoding"]),
+			dependencies: [
+				.product(name: "Encoding", package: "Encoding"),
+			]),
 		.testTarget(
 			name: "Base32Tests",
 			dependencies: ["Base32"]),

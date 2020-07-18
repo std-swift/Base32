@@ -5,59 +5,18 @@ env:
   global:
     - REPO=stdswift/build
   matrix:
-    - SWIFT=5.0.0 OS=trusty
-    - SWIFT=5.0.0 OS=xenial
-    - SWIFT=5.0.0 OS=bionic
-    - SWIFT=5.0.1 OS=trusty
-    - SWIFT=5.0.1 OS=xenial
-    - SWIFT=5.0.1 OS=bionic
-    - SWIFT=5.0.2 OS=trusty
-    - SWIFT=5.0.2 OS=xenial
-    - SWIFT=5.0.2 OS=bionic
-    - SWIFT=5.0.3 OS=trusty
-    - SWIFT=5.0.3 OS=xenial
-    - SWIFT=5.0.3 OS=bionic
-    - SWIFT=5.1.0 OS=trusty
-    - SWIFT=5.1.0 OS=xenial
-    - SWIFT=5.1.0 OS=bionic
-    - SWIFT=5.1.1 OS=trusty
-    - SWIFT=5.1.1 OS=xenial
-    - SWIFT=5.1.1 OS=bionic
-    - SWIFT=5.1.2 OS=trusty
-    - SWIFT=5.1.2 OS=xenial
-    - SWIFT=5.1.2 OS=bionic
-    - SWIFT=5.1.3 OS=trusty
-    - SWIFT=5.1.3 OS=xenial
-    - SWIFT=5.1.3 OS=bionic
-    - SWIFT=5.1.4 OS=trusty
-    - SWIFT=5.1.4 OS=xenial
-    - SWIFT=5.1.4 OS=bionic
-    - SWIFT=5.1.5 OS=trusty
-    - SWIFT=5.1.5 OS=xenial
-    - SWIFT=5.1.5 OS=bionic
-    - SWIFT=5.2.0 OS=xenial
-    - SWIFT=5.2.0 OS=bionic
-    - SWIFT=5.2.1 OS=xenial
-    - SWIFT=5.2.1 OS=bionic
-    - SWIFT=5.2.2 OS=xenial
-    - SWIFT=5.2.2 OS=bionic
-    - SWIFT=5.2.3 OS=xenial
-    - SWIFT=5.2.3 OS=bionic
-    - SWIFT=5.2.4 OS=xenial
-    - SWIFT=5.2.4 OS=bionic
-    - SWIFT=5.2.4 OS=focal
+    - SWIFT=5.1 OS=trusty
+    - SWIFT=5.1 OS=xenial
+    - SWIFT=5.1 OS=bionic
+    - SWIFT=5.2 OS=xenial
+    - SWIFT=5.2 OS=bionic
+    - SWIFT=5.2 OS=focal
 
 matrix:
   include:
     - os: osx
       env:
-      osx_image: xcode10.2
-    - os: osx
-      env:
-      osx_image: xcode10.3
-    - os: osx
-      env:
-      osx_image: xcode11.5
+      osx_image: xcode11.3
     - os: osx
       env:
       osx_image: xcode11.6
@@ -78,11 +37,11 @@ script:
     set -e
     if [[ "$TRAVIS_OS_NAME" == "linux" ]]
     then
-      docker run --volume `pwd`:/code --workdir /code $REPO:$OS-$SWIFT swift test
+      docker run --volume `pwd`:/code --workdir /code $REPO:$OS-$SWIFT swift test --enable-test-discovery
     fi
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]
     then
-      swift test --generate-linuxmain && git diff --exit-code
+      swift build -Xswiftc=-Xfrontend -Xswiftc=-disable-objc-interop
       swift test --enable-code-coverage
     fi
 
